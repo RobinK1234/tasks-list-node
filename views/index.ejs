@@ -21,7 +21,7 @@
                     <span class="card-title">Add Task</span>
                     <div class="row">
                         <form class="col s12" id="add-task">
-                            <div class ="row">
+                            <div class="row">
                                 <div class="input-field col s12">
                                     <input type="text" id="task">
                                     <label for="task">Add new task</label>
@@ -36,15 +36,12 @@
                 <div class="card-action">
                     <p class="card-title" id="task-title">Tasks</p>
                     <ul class="collection" id="task-list">
-                        <li class="collection-item">Study html
-                            <a href="#" class="secondary-content">X</a>
+                        <% tasksData.forEach((taskElement) => { %>
+                        <li class="collection-item">
+                            <%= taskElement.task %>
+                            <a href="delete-task/<%= taskElement.id %>" class="secondary-content">X</a>
                         </li>
-                        <li class="collection-item">Study JS
-                            <a href="#" class="secondary-content">X</a>
-                        </li>
-                        <li class="collection-item">Study CSS
-                            <a href="#" class="secondary-content">X</a>
-                        </li>
+                    <% }) %>
                     </ul>
                     <a href="#" id="delete-tasks" class="btn">Delete All</a>
                 </div>
