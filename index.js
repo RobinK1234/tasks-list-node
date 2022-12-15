@@ -61,6 +61,56 @@ app.get('/delete-task/:taskId', (req,res) => {
     })
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+app.use(express.json())
+app.use(express.urlencoded({extended : true}))
+
+app.post('/add-task', (req, res) => {
+    let userTask = req.body.user_task
+    fs.readFile('./tasks.json', 'utf-8', (err, jsonString) => {
+        if(err){
+            console.log('Error reading file: ', err)
+            return
+        }
+        try {
+            const tasks = JSON.parse(jsonString)
+            let index
+            if(tasks.length === 0)
+            {
+                index = 0
+            } else {
+                index = tasks[tasks.length-1].id + 1;
+            }
+
+            const newTask = {
+                "id" : index,
+                "task" : userTask
+            }
+
+            tasks.push(newTask)
+            jsonString = JSON.stringify(tasks, null, 2)
+            fs.writeFile('./tasks.json', jsonString, 'utf-8', (err) => {
+                if(err) {
+                    console.log('Error writing file: ', err)
+                } else {
+                    console.log('Data is saved to file')
+                }
+            })
+            res.redirect('/')
+        } catch (err) {
+            console.log('Error parsing JSON file: ', err)
+        }
+    })
 })
+
+app.get('/delete-all/', (req, res) => {
+    fs.writeFile('./tasks.json', JSON.stringify([]), err =>{
+        if(err){
+            console.log('Error deleting files')
+        } else {
+            console.log('Deleted all files')
+        }
+    })
+    res.redirect('/')
+})
+
+app.listen(3002)
